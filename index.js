@@ -148,7 +148,7 @@ async function run() {
             const email = req.params.email;
             console.log('137', email)
             if (req.decoded.email !== email) {
-                res.send({ admin: false })
+              return  res.send({ admin: false })
             }
 
             const query = { email: email }
@@ -162,7 +162,7 @@ async function run() {
             const email = req.params.email;
             console.log('150', email)
             if (req.decoded.email !== email) {
-                res.send({ instructor: false })
+              return  res.send({ instructor: false })
             }
 
             const query = { email: email }
@@ -176,7 +176,7 @@ async function run() {
             const email = req.params.email;
             console.log('150', email)
             if (req.decoded.email !== email) {
-                res.send({ student: false })
+               return res.send({ student: false })
             }
 
             const query = { email: email }
