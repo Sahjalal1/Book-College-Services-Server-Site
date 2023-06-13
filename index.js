@@ -43,7 +43,7 @@ const client = new MongoClient(uri, {
 async function run() {
     try {
         // Connect the client to the server	(optional starting in v4.7)
-        
+        await client.connect();
 
         const usersCollection = client.db("summerBD").collection("users");
         const classesCollection = client.db("summerBD").collection("classes");
@@ -93,6 +93,12 @@ async function run() {
 
         app.get('/users', verifyJWT, verifyAdmin, async (req, res) => {
             const result = await usersCollection.find().toArray()
+            res.send(result)
+        })
+
+        app.get('/users/:email',verifyJWT, async(req, res)=>{
+            const email = req.params.email;
+            const result = await usersCollection.find({email: email}).toArray()
             res.send(result)
         })
 
@@ -223,6 +229,21 @@ async function run() {
             const result = await classesCollection.updateOne(filter, updatetoy)
 
             res.send(result)
+        })
+
+        app.patch('/feedback/:id',verifyJWT, async(req, res) =>{
+            const id = req.params.id;
+            const {feedBack} = req.body;
+
+            const filter = {_id: new ObjectId(id)};
+            const updateDoc = {
+                $set: {
+                    feedback: feedBack
+                }
+            };
+            const result = await classesCollection.updateOne(filter, updateDoc);
+            res.send(result)
+
         })
 
         app.post('/addclass', async (req, res) => {
