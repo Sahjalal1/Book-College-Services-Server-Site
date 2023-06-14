@@ -273,12 +273,12 @@ async function run() {
             res.send(result)
         })
 
-        app.get('/enrolledClasses', verifyJWT, async (req, res) => {
-            const result = await paymentCollection.find().toArray();
+        app.get('/enrolledClasses/:email', verifyJWT, async (req, res) => {
+            const email = req.params.email;
+            const result = await paymentCollection.find({email: email}).toArray();
             res.send(result)
         })
 
-        // create payment intent
         app.post('/create-payment-intent', verifyJWT, async (req, res) => {
             const { price } = req.body;
             console.log(price)
