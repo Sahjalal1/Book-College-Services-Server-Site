@@ -33,13 +33,29 @@ async function run() {
 
 
         const collegeCollection = client.db("Book-College-ServicesDB").collection("college");
-        
+        const admissionCollection = client.db("Book-College-ServicesDB").collection("admission");
+
 
 
         app.get('/college', async (req, res) => {
             const result = await collegeCollection.find().toArray()
             res.send(result)
         })
+
+
+        app.post('/admission', async (req, res) => {
+            const admission = req.body;
+            console.log(admission)
+            const result = await admissionCollection.insertOne(admission);
+            res.send(result)
+        })
+
+        app.get("/mycollege/:email", async (req, res) => {
+            console.log(req.params.email);
+            const cursor =admissionCollection.find({ Email: req.params.email})
+            const result = await cursor.toArray();
+            res.send(result)
+          });
 
 
         // Send a ping to confirm a successful connection
